@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "302B0512338B9B21263A6AC61CE1C62DD626FA45",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "FBCDD18C02B3DC03633ED338CCD97319BE26EA3D" : 9223372036854775807,
+    "302B0512338B9B21263A6AC61CE1C62DD626FA45" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "33346357-C76D-473E-8058-20C3F9918C88",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "FBCDD18C02B3DC03633ED338CCD97319BE26EA3D" : "TheMovieDB\/TheMovieDB\/",
+    "302B0512338B9B21263A6AC61CE1C62DD626FA45" : "TheMovieDB\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "TheMovieDB",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "TheMovieDB.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/SergeyLS\/TheMovieDB.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "302B0512338B9B21263A6AC61CE1C62DD626FA45"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/SergeyLS\/TheMovieDB.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "FBCDD18C02B3DC03633ED338CCD97319BE26EA3D"
+    }
+  ]
+}
