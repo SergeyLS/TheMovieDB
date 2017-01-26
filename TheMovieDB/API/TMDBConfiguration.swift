@@ -26,6 +26,15 @@ class TMDBConfig {
      */
     static var READ_ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjY2QwYjk5NjI1NjM3MWZmZDAzZmViOGU4ZjE3NjNlYiIsInN1YiI6IjU4ODhiNTY1YzNhMzY4NDEzYjAwOGUzMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fMUJ3XxsOjCE2C7ZjwQTA87trh70KoS8mvs8P4Vrkww"
     
+    
+    static var nowPlaying: String = "https://api.themoviedb.org/3/movie/now_playing"
+    static var topRated: String = "https://api.themoviedb.org/3/movie/top_rated"
+    static var search: String = "https://api.themoviedb.org/3/search/keyword"
+    
+    //https://api.themoviedb.org/3/person/popular?api_key=<<api_key>>&language=en-US&page=1
+    static var popular: String = "https://api.themoviedb.org/3/person/popular?api_key="
+    
+    
      //Example API Request
     ///https://api.themoviedb.org/3/movie/550?api_key=d1a73364956004feea730e36d63946e4
 
@@ -34,10 +43,10 @@ class TMDBConfig {
     }()
     
     
-    static func buildImagePath(_ poster_path:String)->String{
+    static func buildImagePath(poster_path:String)->String{
         return "\(IMAGE_BASE_URL)w500\(poster_path)"
     }
-    static func buildImagePathX3(_ poster_path:String)->String{
+    static func buildImagePathX3(poster_path:String)->String{
         return "\(IMAGE_BASE_URL)w1000\(poster_path)"
     }
     
