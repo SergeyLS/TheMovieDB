@@ -10,6 +10,13 @@ class TMDBConfig {
     
     static var API_VERSION = "3"
     
+    /* CODEREVIEW_0
+     Ты решил опустить имплементацию /configuration API? Так не пойдет:-)
+     Заимплементь его и достань из респонза base_url и profile_sizes.
+     И только после того как ты их получил можно делать запрос к другим API.
+     Хардкодить нужно по минимуму!
+     */
+    
     /*
      * To build an image URL
      * https://developers.themoviedb.org/3/configuration/get-api-configuration
