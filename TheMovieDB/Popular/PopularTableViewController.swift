@@ -57,7 +57,7 @@ class PopularTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PopularTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PopularTableViewCell
         
         let popular = populars[indexPath.row]
         
@@ -65,7 +65,7 @@ class PopularTableViewController: UITableViewController {
         
 
         
-        let id = popular["id"] as? String
+        //let id = popular["id"] as? String
         let profile_path = popular["profile_path"] as? String
        
         cell.photo.image = UIImage(named: "spinner")
