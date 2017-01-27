@@ -19,6 +19,14 @@ extension People {
     @NSManaged public var id: Int64
     @NSManaged public var name: String?
     @NSManaged public var popularity: Int64
+    
+    /* CODEREVIEW_1
+     Фотки лучше не хранить в базе. Скорость сохранения на диске быстрее.
+     База подходит только для хранения thumbnail-ов
+     Фотки лучше кэшировать в каком нить фолдере
+     Дополнительное задание: Закачивать картинки размером 'original' и в background-е 
+     преобразовывать их под нужные тебе размеры и только потом загружать в селы
+     */
     @NSManaged public var photo: NSData?
 
 }
