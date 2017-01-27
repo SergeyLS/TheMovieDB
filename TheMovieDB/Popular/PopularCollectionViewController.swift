@@ -17,6 +17,7 @@ class PopularCollectionViewController: UICollectionViewController {
     // MARK: - Stored Properties
     //==================================================
     var populars = [NSDictionary] ()
+    let refreshControl = UIRefreshControl()
 
     
     //==================================================
@@ -30,10 +31,11 @@ class PopularCollectionViewController: UICollectionViewController {
        // self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         // UIRefreshControl
-        let refreshControl = UIRefreshControl()
+        
         refreshControl.backgroundColor = UIColor.white
         refreshControl.tintColor = UIColor.gray
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControlEvents.valueChanged)
+        collectionView!.addSubview(refreshControl)
         
         
         loadData()
@@ -122,6 +124,7 @@ class PopularCollectionViewController: UICollectionViewController {
                     self.populars = (dataDictionary["results"] as! [NSDictionary])
                     
                     self.collectionView?.reloadData()
+                    self.refreshControl.endRefreshing()
                      ProgressHUBController.hide()
                     
                 }
