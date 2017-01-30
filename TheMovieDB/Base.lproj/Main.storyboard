@@ -41,7 +41,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hw8-GH-tVZ" id="0zN-dM-VUX">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="m8r-Gl-EXc">
@@ -70,6 +70,7 @@
                                 <connections>
                                     <outlet property="name" destination="lFC-zn-ith" id="PHk-06-SOt"/>
                                     <outlet property="photo" destination="m8r-Gl-EXc" id="pSx-Fb-0LU"/>
+                                    <segue destination="WCC-ZU-bNy" kind="show" identifier="detail" id="kR7-ii-Wd8"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -83,6 +84,38 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gZK-ml-c4H" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1800.8" y="-296.40179910044981"/>
+        </scene>
+        <!--Detail View Controller-->
+        <scene sceneID="tdR-4c-W1t">
+            <objects>
+                <viewController id="WCC-ZU-bNy" customClass="DetailViewController" customModule="TheMovieDB" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OcG-TJ-3kK"/>
+                        <viewControllerLayoutGuide type="bottom" id="OMx-vB-9YA"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4UI-wi-vXG">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oLz-Zg-Dyw">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="oLz-Zg-Dyw" secondAttribute="trailing" id="AK3-un-dWU"/>
+                            <constraint firstItem="OMx-vB-9YA" firstAttribute="top" secondItem="oLz-Zg-Dyw" secondAttribute="bottom" id="H5H-ha-BjG"/>
+                            <constraint firstItem="oLz-Zg-Dyw" firstAttribute="leading" secondItem="4UI-wi-vXG" secondAttribute="leading" id="eev-WI-bzo"/>
+                            <constraint firstItem="oLz-Zg-Dyw" firstAttribute="top" secondItem="OcG-TJ-3kK" secondAttribute="bottom" id="wL1-RC-wMU"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="photo" destination="oLz-Zg-Dyw" id="nJ2-pb-vVq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mkp-Py-DoZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2824.8000000000002" y="-110.19490254872565"/>
         </scene>
         <!--Popular Collection View Controller-->
         <scene sceneID="dDb-vx-JGH">
@@ -129,6 +162,7 @@
                                 <connections>
                                     <outlet property="name" destination="YuJ-Mv-Zf5" id="tkZ-E3-tdP"/>
                                     <outlet property="photo" destination="c85-jc-S1K" id="EeW-ud-27b"/>
+                                    <segue destination="WCC-ZU-bNy" kind="show" id="WqM-hk-LHx"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -182,4 +216,7 @@
             <point key="canvasLocation" x="869.60000000000002" y="462.8185907046477"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="kR7-ii-Wd8"/>
+    </inferredMetricsTieBreakers>
 </document>

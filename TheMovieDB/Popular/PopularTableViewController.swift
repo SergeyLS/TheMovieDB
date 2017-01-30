@@ -15,8 +15,9 @@ class PopularTableViewController: UITableViewController {
     // MARK: - Stored Properties
     //==================================================
 
-    var populars = [[String : AnyObject]]()
+    //var populars = [[String : AnyObject]]()
     
+    var populars = [People]()
     
     //==================================================
     // MARK: - General
@@ -61,41 +62,64 @@ class PopularTableViewController: UITableViewController {
         
         let popular = populars[indexPath.row]
         
-        cell.title = popular["name"] as? String
+        cell.title = popular.name
         
-
+        
         
         //let id = popular["id"] as? String
-        let profile_path = popular["profile_path"] as? String
-       
+        let profile_path = popular.profile_path
+        
         cell.photo.image = UIImage(named: "spinner")
         cell.photo.startRotating()
-
         
-        if let profile_path = profile_path, let url = URL(string: TMDBConfig.buildImagePath(poster_path: profile_path)) {
-            let imageRequest = URLRequest(url: url)
+        
+        if let fotoCore = popular.photo {
+            cell.photo.stopRotating()
+            cell.photo.image = UIImage(data: fotoCore)
             
-            cell.photo.setImageWith(
-                imageRequest as URLRequest,
-                placeholderImage: nil,
-                success: { (imageRequest, imageResponse, image) -> Void in
+        } else {
+            DispatchQueue.main.async {
+                
+                if let profile_path = profile_path,
+                    let url = URL(string: TMDBConfig.buildImagePathX3(poster_path: profile_path)),
+                    let data = try? Data(contentsOf: url)
+                {
+                    
                     cell.photo.stopRotating()
-                    // imageResponse will be nil if the image is cached
-                    if imageResponse != nil {
-                        // print("Image was NOT cached, fade in image")
-                        cell.photo.image = image
-                    } else {
-                        //print("Image was cached so just update the image")
-                        cell.photo.image = image
-                    }
-            }, failure: { (imageRequest, imageResponse, error) -> Void in
-                // do something for the failure condition
-            })
+                    cell.photo.image = UIImage(data: data)
+                    
+                    popular.photo = data
+                    PersistenceController.shared.saveContext()
+                }
+            }
+            
+            
         }
-
+        
+        
+        
         return cell
     }
     
+    
+    //==================================================
+    // MARK: - Navigation
+    //==================================================
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "detail") {
+            let destinationController = segue.destination as! DetailViewController
+            let row = (self.tableView.indexPathForSelectedRow! as NSIndexPath).row
+            
+            let popular = populars[row]
+            
+            if let fotoCore = popular.photo {
+                 destinationController.image = UIImage(data: fotoCore)!
+            }
+
+            
+           }
+    }
+
 
     
     
@@ -106,34 +130,70 @@ class PopularTableViewController: UITableViewController {
     func loadData() {
         ProgressHUBController.show(label: NSLocalizedString("Гружу...", comment: "Text for ProgressHUBController"))
  
-        let stringURL = TMDBConfig.popular + TMDBConfig.API_KEY + "&language=en-US&page=1"
+//        let stringURL = TMDBConfig.popular + TMDBConfig.API_KEY + "&language=en-US&page=1"
+//        
+//        let url = URL(string: stringURL)!
+//        
+//        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
+//        
+//        let session = URLSession(configuration: .default)
+//        //        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
+//        let task: URLSessionDataTask = session.dataTask(with: request) { [weak self] (data: Data?, response: URLResponse?, error: Error?) in
+//            if let data = data,
+//                let dataDictionary = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String : Any],
+//                let popularsRep = dataDictionary["results"] as? [[String : AnyObject]] {
+//                //print(dataDictionary)
+//                
+//                self?.populars = popularsRep
+//                DispatchQueue.main.async {
+//                    self?.tableView.reloadData()
+//                }
+//            }
+//            
+//            DispatchQueue.main.async {
+//                self?.refreshControl?.endRefreshing()
+//                ProgressHUBController.hide()
+//            }
+//        }
+//        task.resume()
         
-        let url = URL(string: stringURL)!
         
-        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
+//        // the get funciton is called here
+//        PopularController.getFromTMDB() { [weak self] result in
+//            switch result {
+//            case .success(let popularDict):
+//                
+//                self?.populars = popularDict
+//                DispatchQueue.main.async {
+//                    self?.tableView.reloadData()
+//                    self?.refreshControl?.endRefreshing()
+//                    ProgressHUBController.hide()
+//                }
+//              
+//                
+//             case .failure(let error):
+//                print(error)
+//            }
+//        }
         
-        let session = URLSession(configuration: .default)
-        //        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
-        let task: URLSessionDataTask = session.dataTask(with: request) { [weak self] (data: Data?, response: URLResponse?, error: Error?) in
-            if let data = data,
-                let dataDictionary = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String : Any],
-                let popularsRep = dataDictionary["results"] as? [[String : AnyObject]] {
-                //print(dataDictionary)
+        
+        
+        PopularController.getFromCore() { [weak self] result in
+            switch result {
+            case .success(let popularArray):
                 
-                self?.populars = popularsRep
+                self?.populars = popularArray
                 DispatchQueue.main.async {
                     self?.tableView.reloadData()
+                    self?.refreshControl?.endRefreshing()
+                    ProgressHUBController.hide()
                 }
-            }
-            
-            DispatchQueue.main.async {
-                self?.refreshControl?.endRefreshing()
-                ProgressHUBController.hide()
+                
+            case .failure(let error):
+                print(error)
             }
         }
-        task.resume()
-        
-        
+
         
     }
     

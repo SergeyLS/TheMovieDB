@@ -3,19 +3,46 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "PopularTableViewController.prepare(for : UIStoryboardSegue, sender : Any?) -&gt; ():PopularTableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UIImage(data: fotoCore)">
+            </PersistentString>
+            <PersistentString
+               value = "segue.identifier">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "static PopularController.(getFromCore(completion : (Result&lt;[People]&gt;) -&gt; ()) -&gt; ()).(closure #1):PopularController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "element[&quot;id&quot;] ">
+            </PersistentString>
+            <PersistentString
+               value = "element[&quot;id&quot;] as? Int64">
+            </PersistentString>
+            <PersistentString
+               value = "peoples">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PopularTableViewController.(loadData() -&gt; ()).(closure #1):PopularTableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "populars">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "PopularTableViewController.tableView(UITableView, cellForRowAt : IndexPath) -&gt; UITableViewCell:PopularTableViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "populars.count">
+               value = "popular.profile_path">
             </PersistentString>
             <PersistentString
-               value = "popular[&quot;name&quot;]">
-            </PersistentString>
-            <PersistentString
-               value = "popular[&quot;name&quot;] as? String">
-            </PersistentString>
-            <PersistentString
-               value = "profile_path">
+               value = "TMDBConfig.buildImagePath(poster_path: profile_path)">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
