@@ -159,8 +159,16 @@ class PopularCollectionViewController: UICollectionViewController {
                     ProgressHUBController.hide()
                 }
                 
-            case .failure(let error):
-                print(error)
+            case .failure( _):
+                //print(error)
+                self?.populars = []
+                DispatchQueue.main.async {
+                    self?.collectionView?.reloadData()
+                    self?.refreshControl.endRefreshing()
+                    ProgressHUBController.hide()
+                }
+                
+                
             }
         }
     }

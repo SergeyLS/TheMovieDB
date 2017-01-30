@@ -43,7 +43,8 @@ class PopularController {
                 completion(Result.success(popularsRep))
                 
             } else {
-                fatalError(error as! String)
+                //fatalError(error as! String)
+                completion(Result.failure(error!))
              }
             
          }
@@ -106,7 +107,8 @@ class PopularController {
                 
             case .failure(let error):
                 //print(error)
-                fatalError(error as! String)
+                
+                completion(Result.failure(error))
             }
         }
     }

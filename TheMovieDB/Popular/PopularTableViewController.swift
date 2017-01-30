@@ -203,12 +203,18 @@ class PopularTableViewController: UITableViewController {
                     ProgressHUBController.hide()
                 }
                 
-            case .failure(let error):
-                print(error)
+            case .failure( _):
+                //print(error)
+                
+                self?.populars = []
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                    self?.refreshControl?.endRefreshing()
+                    ProgressHUBController.hide()
+                }
             }
+            
         }
-
-        
     }
     
  
