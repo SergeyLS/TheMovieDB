@@ -30,7 +30,6 @@ class PopularTableViewController: UITableViewController {
         refreshControl?.backgroundColor = UIColor.white
         refreshControl?.tintColor = UIColor.gray
         refreshControl?.addTarget(self, action: #selector(loadData), for: UIControlEvents.valueChanged)
-
         
         loadData()
     }
@@ -67,34 +66,49 @@ class PopularTableViewController: UITableViewController {
         
         
         //let id = popular["id"] as? String
-        let profile_path = popular.profile_path
+        //let profile_path = popular.profile_path
         
         cell.photo.image = UIImage(named: "spinner")
         cell.photo.startRotating()
         
-        
-        if let fotoCore = popular.photo {
-            cell.photo.stopRotating()
-            cell.photo.image = UIImage(data: fotoCore)
-            
-        } else {
-            DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            PopularController.getImage(people: popular, imageSize: ImageSize.thumbnail, completion: { (image) in
                 
-                if let profile_path = profile_path,
-                    let url = URL(string: TMDBConfig.buildImagePathX3(poster_path: profile_path)),
-                    let data = try? Data(contentsOf: url)
-                {
-                    
-                    cell.photo.stopRotating()
-                    cell.photo.image = UIImage(data: data)
-                    
-                    popular.photo = data
-                    PersistenceController.shared.saveContext()
-                }
-            }
-            
-            
+                cell.photo.image = image
+                cell.photo.stopRotating()
+                
+            })
         }
+      
+        
+//        if let fotoCore = popular.photo {
+//            DispatchQueue.main.async {
+//                cell.photo.image = UIImage(data: fotoCore)
+//                cell.photo.stopRotating()
+//            }
+//            
+//        } else {
+//            DispatchQueue.main.async {
+//                
+//                if let profile_path = profile_path,
+//                    let url = URL(string: TMDBConfig.buildImagePathX3(poster_path: profile_path)),
+//                    let data = try? Data(contentsOf: url)
+//                {
+//                    
+//                    
+//                      
+//                    var image = UIImage(data: data)
+//                    //image = ImageController.ResizeImage(image: image, newWidth: 600)
+//                    
+//                    cell.photo.image = image
+//                    
+//                    popular.photo = data
+//                    PersistenceController.shared.saveContext()
+//                }
+//            }
+//            
+//            
+//        }
         
         
         

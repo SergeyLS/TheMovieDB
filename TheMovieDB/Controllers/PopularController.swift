@@ -15,6 +15,12 @@ enum Result<T> {
     case failure(Error)
 }
 
+enum ImageSize {
+    case original
+    case thumbnail
+}
+
+
 
 class PopularController {
     
@@ -103,11 +109,50 @@ class PopularController {
                 fatalError(error as! String)
             }
         }
-       
-        
     }
 
     
+    static func getImage(people: People, imageSize: ImageSize, completion: @escaping (_ image: UIImage) -> Void)  {
+        
+        if let fotoOriginal = people.photo,
+            let fotoThumbnail = people.thumbnail
+        {
+            
+            switch imageSize {
+            case .original:
+                completion(UIImage(data: fotoOriginal)!)
+            case .thumbnail:
+                completion(UIImage(data: fotoThumbnail)!)
+            }
+            
+            
+        } else {
+            
+            if let profile_path = people.profile_path,
+                let url = URL(string: TMDBConfig.buildImagePathX3(poster_path: profile_path)),
+                let data = try? Data(contentsOf: url),
+                let image = UIImage(data: data)
+            {
+                
+               let thumbnail = ImageController.ResizeImage(image: image, newWidth: 150)
+                
+               people.thumbnail = UIImagePNGRepresentation(thumbnail)
+               people.photo = data
+               PersistenceController.shared.saveContext()
+                
+                switch imageSize {
+                case .original:
+                    completion(image)
+                case .thumbnail:
+                    completion(thumbnail)
+                }
+              
+            }
+            
+            
+        } //else
+        
+    }
     
     
 }

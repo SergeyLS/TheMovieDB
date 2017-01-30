@@ -16,7 +16,9 @@ class PopularCollectionViewController: UICollectionViewController {
     //==================================================
     // MARK: - Stored Properties
     //==================================================
-    var populars = [NSDictionary] ()
+    //var populars = [NSDictionary] ()
+    var populars = [People]()
+    
     let refreshControl = UIRefreshControl()
 
     
@@ -66,36 +68,48 @@ class PopularCollectionViewController: UICollectionViewController {
     
         let popular = populars[indexPath.row]
 
-        cell.name.text = popular["name"] as? String
+        cell.name.text = popular.name
         
-        //let id = popular["id"] as? String
-        let profile_path = popular["profile_path"] as? String
+//        let profile_path = popular["profile_path"] as? String
+//        
+//        cell.photo.image = UIImage(named: "spinner")
+//        cell.photo.startRotating()
+//        
+//        
+//        let imageURL = TMDBConfig.buildImagePath(poster_path: profile_path!)
+//        let imageRequest = NSURLRequest(url: NSURL(string:imageURL)! as URL)
+//        
+//        
+//        cell.photo.setImageWith(
+//            imageRequest as URLRequest,
+//            placeholderImage: nil,
+//            success: { (imageRequest, imageResponse, image) -> Void in
+//                cell.photo.stopRotating()
+//                // imageResponse will be nil if the image is cached
+//                if imageResponse != nil {
+//                    // print("Image was NOT cached, fade in image")
+//                    cell.photo.image = image
+//                } else {
+//                    //print("Image was cached so just update the image")
+//                    cell.photo.image = image
+//                }
+//        },
+//            failure: { (imageRequest, imageResponse, error) -> Void in
+//                // do something for the failure condition
+//        })
         
         cell.photo.image = UIImage(named: "spinner")
         cell.photo.startRotating()
         
-        
-        let imageURL = TMDBConfig.buildImagePath(poster_path: profile_path!)
-        let imageRequest = NSURLRequest(url: NSURL(string:imageURL)! as URL)
-        
-        
-        cell.photo.setImageWith(
-            imageRequest as URLRequest,
-            placeholderImage: nil,
-            success: { (imageRequest, imageResponse, image) -> Void in
+        DispatchQueue.main.async {
+            PopularController.getImage(people: popular, imageSize: ImageSize.thumbnail, completion: { (image) in
+                
+                cell.photo.image = image
                 cell.photo.stopRotating()
-                // imageResponse will be nil if the image is cached
-                if imageResponse != nil {
-                    // print("Image was NOT cached, fade in image")
-                    cell.photo.image = image
-                } else {
-                    //print("Image was cached so just update the image")
-                    cell.photo.image = image
-                }
-        },
-            failure: { (imageRequest, imageResponse, error) -> Void in
-                // do something for the failure condition
-        })
+                
+            })
+        }
+
     
         return cell
     }
@@ -107,34 +121,73 @@ class PopularCollectionViewController: UICollectionViewController {
     //==================================================
     
     func loadData() {
-        ProgressHUBController.show(label: "Гружу...")
+         ProgressHUBController.show(label: NSLocalizedString("Гружу...", comment: "Text for ProgressHUBController"))
         
         
-        let stringURL = TMDBConfig.popular + TMDBConfig.API_KEY + "&language=en-US&page=1"
+//        let stringURL = TMDBConfig.popular + TMDBConfig.API_KEY + "&language=en-US&page=1"
+//        
+//        let url = URL(string: stringURL)!
+//        
+//        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
+//        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
+//        let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+//            if let data = data {
+//                if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
+//                    //print(dataDictionary)
+//                    
+//                    self.populars = (dataDictionary["results"] as! [NSDictionary])
+//                    
+//                    self.collectionView?.reloadData()
+//                    self.refreshControl.endRefreshing()
+//                     ProgressHUBController.hide()
+//                    
+//                }
+//            }
+//            
+//        }
+//        task.resume()
+
         
-        let url = URL(string: stringURL)!
-        
-        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
-        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
-        let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            if let data = data {
-                if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
-                    //print(dataDictionary)
-                    
-                    self.populars = (dataDictionary["results"] as! [NSDictionary])
-                    
-                    self.collectionView?.reloadData()
-                    self.refreshControl.endRefreshing()
-                     ProgressHUBController.hide()
-                    
+        PopularController.getFromCore() { [weak self] result in
+            switch result {
+            case .success(let popularArray):
+                
+                self?.populars = popularArray
+                DispatchQueue.main.async {
+                    self?.collectionView?.reloadData()
+                    self?.refreshControl.endRefreshing()
+                    ProgressHUBController.hide()
                 }
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
+    
+    //==================================================
+    // MARK: - Navigation
+    //==================================================
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "detail") {
+            let destinationController = segue.destination as! DetailViewController
+            
+            if let cell = sender as? PopularCollectionViewCell,
+                let indexPath = collectionView?.indexPath(for: cell) {
+                
+                let row = indexPath.row
+                let popular = populars[row]
+                
+                if let fotoCore = popular.photo {
+                    destinationController.image = UIImage(data: fotoCore)!
+                }
+                
             }
             
+            
+            
         }
-        task.resume()
-        
-        
-        
     }
 
  

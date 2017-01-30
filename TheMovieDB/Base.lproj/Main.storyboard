@@ -41,7 +41,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hw8-GH-tVZ" id="0zN-dM-VUX">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="m8r-Gl-EXc">
@@ -162,7 +162,7 @@
                                 <connections>
                                     <outlet property="name" destination="YuJ-Mv-Zf5" id="tkZ-E3-tdP"/>
                                     <outlet property="photo" destination="c85-jc-S1K" id="EeW-ud-27b"/>
-                                    <segue destination="WCC-ZU-bNy" kind="show" id="WqM-hk-LHx"/>
+                                    <segue destination="WCC-ZU-bNy" kind="show" identifier="detail" id="WqM-hk-LHx"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -181,7 +181,7 @@
         <scene sceneID="Hpq-UL-YPB">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="T3u-eS-bw4" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Table" id="oWF-aB-Srz"/>
+                    <tabBarItem key="tabBarItem" title="Table" image="table" id="oWF-aB-Srz"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="hh9-Gl-7sI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -200,7 +200,7 @@
         <scene sceneID="p3Y-Sr-Ti6">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="qX8-Qg-fZ9" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Collection" id="thp-6d-Sug"/>
+                    <tabBarItem key="tabBarItem" title="Collection" image="collection" id="thp-6d-Sug"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Njy-ya-TXs">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -216,7 +216,11 @@
             <point key="canvasLocation" x="869.60000000000002" y="462.8185907046477"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="collection" width="20" height="20"/>
+        <image name="table" width="20" height="20"/>
+    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="kR7-ii-Wd8"/>
+        <segue reference="WqM-hk-LHx"/>
     </inferredMetricsTieBreakers>
 </document>

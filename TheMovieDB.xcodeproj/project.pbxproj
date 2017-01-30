@@ -15,6 +15,7 @@
 		A6691F1D1E3E242900AE46DB /* UsefulFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6691F1C1E3E242900AE46DB /* UsefulFunctions.swift */; };
 		A6691F1F1E3EA06500AE46DB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6691F1E1E3EA06500AE46DB /* PersistenceController.swift */; };
 		A6691F211E3EB96700AE46DB /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6691F201E3EB96700AE46DB /* DetailViewController.swift */; };
+		A67F40991E3F3B3E005E1892 /* ImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67F40981E3F3B3E005E1892 /* ImageController.swift */; };
 		A67FF5471E39FC2200FE55C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67FF5461E39FC2200FE55C9 /* AppDelegate.swift */; };
 		A67FF54C1E39FC2200FE55C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A67FF54A1E39FC2200FE55C9 /* Main.storyboard */; };
 		A67FF54F1E39FC2200FE55C9 /* TheMovieDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A67FF54D1E39FC2200FE55C9 /* TheMovieDB.xcdatamodeld */; };
@@ -40,6 +41,7 @@
 		A6691F1C1E3E242900AE46DB /* UsefulFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UsefulFunctions.swift; path = Controllers/UsefulFunctions.swift; sourceTree = "<group>"; };
 		A6691F1E1E3EA06500AE46DB /* PersistenceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersistenceController.swift; path = Controllers/PersistenceController.swift; sourceTree = "<group>"; };
 		A6691F201E3EB96700AE46DB /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetailViewController.swift; path = Popular/DetailViewController.swift; sourceTree = "<group>"; };
+		A67F40981E3F3B3E005E1892 /* ImageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageController.swift; path = Controllers/ImageController.swift; sourceTree = "<group>"; };
 		A67FF5431E39FC2200FE55C9 /* TheMovieDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheMovieDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A67FF5461E39FC2200FE55C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A67FF54B1E39FC2200FE55C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				A61947131E3A37BD001E09E0 /* Extensions.swift */,
 				A6691F1A1E3E226900AE46DB /* Stack.swift */,
 				A6691F1C1E3E242900AE46DB /* UsefulFunctions.swift */,
+				A67F40981E3F3B3E005E1892 /* ImageController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				A67FF5471E39FC2200FE55C9 /* AppDelegate.swift in Sources */,
 				A67FF5791E3A2DF000FE55C9 /* People+CoreDataProperties.swift in Sources */,
 				A6691F1D1E3E242900AE46DB /* UsefulFunctions.swift in Sources */,
+				A67F40991E3F3B3E005E1892 /* ImageController.swift in Sources */,
 				A67FF56C1E3A247800FE55C9 /* ProgressHUBController.swift in Sources */,
 				A61947161E3A4188001E09E0 /* PopularCollectionViewController.swift in Sources */,
 			);
