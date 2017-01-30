@@ -180,7 +180,7 @@ class PopularCollectionViewController: UICollectionViewController {
                 let popular = populars[row]
                 
                 if let fotoCore = popular.photo {
-                    destinationController.image = UIImage(data: fotoCore)!
+                    destinationController.imageData = fotoCore
                 }
                 
             }

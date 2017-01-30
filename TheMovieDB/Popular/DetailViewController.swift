@@ -13,13 +13,16 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var photo: UIImageView!
     
-    var image = UIImage()
+    var imageData = Data()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        photo.image = image
+        
+        photo.image = UIImage(data: imageData)
         // Do any additional setup after loading the view.
+        
+        print("size: " + String(imageData.count))
     }
 
     override func didReceiveMemoryWarning() {
