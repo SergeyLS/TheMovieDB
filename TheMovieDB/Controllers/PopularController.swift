@@ -24,6 +24,9 @@ enum ImageSize {
 
 class PopularController {
     
+    /* CODEREVIEW_9
+     Я бы перенес весь код по работе с сетью в NetworkManager, а парсинг в Manager подобный этому. Мне только название не нравится 'PopularController' - визуально срабатывает что это ViewController.
+     */
     static func getFromTMDB(completion: @escaping (Result<[[String : AnyObject]]>) -> Void) {
         
         //let stringURL = TMDBConfig.popular + TMDBConfig.API_KEY + "&language=en-US&page=1"
@@ -68,42 +71,49 @@ class PopularController {
 
     
     
+    /* CODEREVIEW_11
+     Колбэк тебе не нужен. Когда данные в базе обновляются NSFetchedResultsController об этом узнает и запускает делегата controllerDidChangeContent(_ controller:)
+     */
     static func getFromCore(completion: @escaping (Result<[People]>) -> Void) {
         
-        let moc = Stack.shared.managedObjectContext
+//        let moc = Stack.shared.managedObjectContext
+        let moc = Stack.shared.backgroundContext
         
         PopularController.getFromTMDB() { result in
             switch result {
             case .success(let popularDict):
                 var peoples = [People]()
                 
-                for  element in popularDict {
-                    guard let id = element["id"] as? Int64
-                        else { return }
-
-                    moc.performAndWait({
+                /* CODEREVIEW_10
+                 Весь парсинг в бэкграунде запустить и операцию сохранить БД запустить тоьлко в конце когда все сущности уже занесены в контекст
+                 */
+                moc.perform{
+                    for  element in popularDict {
+                        guard let id = element["id"] as? Int64 else {
+                            continue
+                        }
                         
                         if let existPeople = getPeopleByIdName(idName: Int64(id) )  {
                             //update
                             //print("id exist:" + String(id))
                             peoples.append(existPeople)
-                          }else{
+                        } else {
                             // New
                             guard let newPeople = People(dictionary: element as NSDictionary) else {
                                 
+                                /* CODEREVIEW_13
+                                 Используй print вместо NSLog
+                                 */
                                 NSLog("Error: Could not create a new TrainingExcersise from the CloudKit record.")
-                                return
+                                continue
                             }
-                            
-                            PersistenceController.shared.saveContext()
                             
                             peoples.append(newPeople)
                         } //else
-                     }) //performAndWait
-                } //for  element in popularDict
-               
-                
-                completion(Result.success(peoples))
+                    } //for  element in popularDict
+
+                    PersistenceController.shared.saveContext()
+                }
                 
             case .failure(let error):
                 //print(error)

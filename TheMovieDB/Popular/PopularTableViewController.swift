@@ -8,8 +8,9 @@
 
 import UIKit
 import AFNetworking
+import CoreData
 
-class PopularTableViewController: UITableViewController {
+class PopularTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
 
     //==================================================
     // MARK: - Stored Properties
@@ -19,6 +20,20 @@ class PopularTableViewController: UITableViewController {
     
     var populars = [People]()
     
+    /* CODEREVIEW_2
+     Для отображения данных из БД в таблице используй NSFetchedResultsController
+     */
+    lazy var fetchResultController: NSFetchedResultsController<People> = { () -> NSFetchedResultsController<People> in
+        
+        let request: NSFetchRequest<People> = People.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        
+        let resultController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: Stack.shared.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        resultController.delegate = self
+        
+        return resultController
+    }()
+
     //==================================================
     // MARK: - General
     //==================================================
@@ -47,19 +62,32 @@ class PopularTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        /* CODEREVIEW_3
+         Для отображения данных из БД в таблице используй NSFetchedResultsController
+         */
+        return fetchResultController.sections?.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return populars.count
+        /* CODEREVIEW_4
+         Для отображения данных из БД в таблице используй NSFetchedResultsController
+         */
+        if let sections = fetchResultController.sections, sections.count > 0 {
+            return sections[section].numberOfObjects
+        } else {
+            return 0
+        }
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PopularTableViewCell
         
-        let popular = populars[indexPath.row]
+        /* CODEREVIEW_5
+         Для отображения данных из БД в таблице используй NSFetchedResultsController
+         */
+        let popular = fetchResultController.object(at: indexPath)
         
         cell.title = popular.name
         
@@ -116,6 +144,13 @@ class PopularTableViewController: UITableViewController {
     }
     
     
+    /* CODEREVIEW_12
+     Колбэк тебе не нужен. Когда данные в базе обновляются NSFetchedResultsController об этом узнает и запускает делегата controllerDidChangeContent(_ controller:)
+     */
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView?.reloadData()
+    }
+
     //==================================================
     // MARK: - Navigation
     //==================================================
@@ -192,6 +227,9 @@ class PopularTableViewController: UITableViewController {
         
         
         
+        /* CODEREVIEW_6
+         Для отображения данных из БД в таблице используй NSFetchedResultsController
+         */
         PopularController.getFromCore() { [weak self] result in
             switch result {
             case .success(let popularArray):

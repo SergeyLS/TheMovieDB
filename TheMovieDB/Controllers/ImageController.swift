@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+/* CODEREVIEW_15
+ Лучше перенести код в расширение UIImage. Например UIImage+Extension.swift
+ */
+
 class ImageController {
     
     

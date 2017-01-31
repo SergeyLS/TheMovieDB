@@ -23,6 +23,9 @@ public class People: NSManagedObject {
     //==================================================
     // MARK: - Initializers
     //==================================================
+    /* CODEREVIEW_14
+     По умолчанию я бы main context сюда не ставил. Ты все равно будешь создавать новые entity в бэкграунде
+     */
      convenience init?(id: Int64, name: String, photo: Data,_  context: NSManagedObjectContext = Stack.shared.managedObjectContext) {
         
         guard let tempEntity = NSEntityDescription.entity(forEntityName: People.type, in: context) else {

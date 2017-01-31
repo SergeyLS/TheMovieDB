@@ -12,6 +12,9 @@ import UIKit
 // MARK: - UIView
 //==================================================
 
+/* CODEREVIEW_7
+ Extensions классов лучше разносить по разным swift файлам. Например UIView+Extension.swift
+ */
 extension UIView {
     func startRotating(_ duration: Double = 1) {
         let kAnimationKey = "rotation"

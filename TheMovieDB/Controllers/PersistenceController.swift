@@ -10,6 +10,9 @@
 import Foundation
 import CoreData
 
+/* CODEREVIEW_8
+ PersistenceController и Stack - это одно и тоже перенеси весь код в одно место
+ */
 
 class PersistenceController {
     
