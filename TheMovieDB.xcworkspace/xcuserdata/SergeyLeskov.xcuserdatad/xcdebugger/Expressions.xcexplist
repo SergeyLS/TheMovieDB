@@ -3,13 +3,29 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "PopularTableViewController.prepare(for : UIStoryboardSegue, sender : Any?) -&gt; ():PopularTableViewController.swift">
+         contextName = "PopularTableViewController.tableView(UITableView, cellForRowAt : IndexPath) -&gt; UITableViewCell:PopularTableViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "UIImage(data: fotoCore)">
+               value = "popular.profile_path">
             </PersistentString>
             <PersistentString
-               value = "segue.identifier">
+               value = "TMDBConfig.buildImagePath(poster_path: profile_path)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PopularTableViewController.(loadData() -&gt; ()).(closure #1):PopularTableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "populars">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "static PopularController.(getFromCore(completion : (Result&lt;[People]&gt;) -&gt; ()) -&gt; ()).(closure #1).(closure #1):PopularController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "peoples.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -28,29 +44,43 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "PopularTableViewController.(loadData() -&gt; ()).(closure #1):PopularTableViewController.swift">
+         contextName = "PopularTableViewController.prepare(for : UIStoryboardSegue, sender : Any?) -&gt; ():PopularTableViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "populars">
+               value = "UIImage(data: fotoCore)">
+            </PersistentString>
+            <PersistentString
+               value = "segue.identifier">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "PopularTableViewController.tableView(UITableView, cellForRowAt : IndexPath) -&gt; UITableViewCell:PopularTableViewController.swift">
+         contextName = "CoreDataManager.saveContext() -&gt; ():CoreDataManager.swift">
          <PersistentStrings>
             <PersistentString
-               value = "popular.profile_path">
-            </PersistentString>
-            <PersistentString
-               value = "TMDBConfig.buildImagePath(poster_path: profile_path)">
+               value = "context.hasChanges">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "static PopularController.(getFromCore(completion : (Result&lt;[People]&gt;) -&gt; ()) -&gt; ()).(closure #1).(closure #1):PopularController.swift">
+         contextName = "PopularTableViewController.tableView(UITableView, numberOfRowsInSection : Int) -&gt; Int:PopularTableViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "peoples.count">
+               value = "fetchResultController.sections">
+            </PersistentString>
+            <PersistentString
+               value = "sections.count">
+            </PersistentString>
+            <PersistentString
+               value = "sections[section].numberOfObjects">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "static PopularController.getImage(people : People, imageSize : ImageSize, completion : (UIImage) -&gt; ()) -&gt; ():PopularController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "people.profile_path">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

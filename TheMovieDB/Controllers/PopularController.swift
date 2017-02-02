@@ -31,7 +31,7 @@ class PopularController {
         let predicate = NSPredicate(format: "id == %@", argumentArray: [idName])
         request.predicate = predicate
         
-        let resultsArray = (try? CoreDataManager.shared.managedObjectContext.fetch(request)) as? [People]
+        let resultsArray = (try? CoreDataManager.shared.viewContext.fetch(request)) as? [People]
         
         return resultsArray?.first ?? nil
     }
@@ -43,11 +43,8 @@ class PopularController {
             case .success(let popularDict):
                 var peoples = [People]()
                 
-                /* CODEREVIEW_10
-                 Весь парсинг в бэкграунде запустить и операцию сохранить БД запустить тоьлко в конце когда все сущности уже занесены в контекст
-                 */
                 let moc = CoreDataManager.shared.backgroundContext
-                moc.perform{
+                moc?.perform{
                     for  element in popularDict {
                         guard let id = element["id"] as? Int64 else {
                             continue
@@ -68,6 +65,7 @@ class PopularController {
                         } //else
                     } //for  element in popularDict
 
+                    
                     CoreDataManager.shared.saveContext()
                     completion(Result.success(peoples))
                 }
@@ -117,9 +115,7 @@ class PopularController {
                 }
               
             }
-            
-            
-            
+             
         } //else
         
     }

@@ -47,11 +47,11 @@ public class People: NSManagedObject {
                 return nil
         }
         
-        guard let tempEntity = NSEntityDescription.entity(forEntityName: People.type, in: CoreDataManager.shared.managedObjectContext) else {
+        guard let tempEntity = NSEntityDescription.entity(forEntityName: People.type, in: CoreDataManager.shared.viewContext) else {
             fatalError("Could not initialize People")
             return nil
         }
-        self.init(entity: tempEntity, insertInto: CoreDataManager.shared.managedObjectContext)
+        self.init(entity: tempEntity, insertInto: CoreDataManager.shared.viewContext)
 
         
         self.name = name

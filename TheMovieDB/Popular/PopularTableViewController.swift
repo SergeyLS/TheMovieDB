@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AFNetworking
 import CoreData
 
 class PopularTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
@@ -16,22 +15,8 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
     // MARK: - Stored Properties
     //==================================================
 
-    var populars = [People]()
-    
-    /* CODEREVIEW_2
-     Для отображения данных из БД в таблице используй NSFetchedResultsController
-     */
-    lazy var fetchResultController: NSFetchedResultsController<People> = { () -> NSFetchedResultsController<People> in
+     var fetchResultController = CoreDataManager.shared.fetchedResultsController(entityName: "People", keyForSort: "name")
         
-        let request: NSFetchRequest<People> = People.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        
-        let resultController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: CoreDataManager.shared.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        resultController.delegate = self
-        
-        return resultController
-    }()
-
     //==================================================
     // MARK: - General
     //==================================================
@@ -43,6 +28,14 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
         refreshControl?.backgroundColor = UIColor.white
         refreshControl?.tintColor = UIColor.gray
         refreshControl?.addTarget(self, action: #selector(loadData), for: UIControlEvents.valueChanged)
+        
+        
+        fetchResultController.delegate = self
+        do {
+            try fetchResultController.performFetch()
+        } catch {
+            print(error)
+        }
         
         loadData()
     }
@@ -74,9 +67,9 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PopularTableViewCell
   
-        let popular = fetchResultController.object(at: indexPath)
+        let people = fetchResultController.object(at: indexPath) as! People
         
-        cell.title = popular.name
+        cell.title = people.name
         
         
         
@@ -87,7 +80,7 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
         cell.photo.startRotating()
         
         DispatchQueue.main.async {
-            PopularController.getImage(people: popular, imageSize: ImageSize.thumbnail, completion: { (image) in
+            PopularController.getImage(people: people, imageSize: ImageSize.thumbnail, completion: { (image) in
                 
                 cell.photo.image = image
                 cell.photo.stopRotating()
@@ -99,11 +92,10 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
         return cell
     }
     
-    
-    /* CODEREVIEW_12
-     Колбэк тебе не нужен. Когда данные в базе обновляются NSFetchedResultsController об этом узнает и запускает делегата controllerDidChangeContent(_ controller:)
-     */
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    //==================================================
+    // MARK: - fetchResultController
+    //==================================================
+     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView?.reloadData()
     }
 
@@ -113,11 +105,11 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "detail") {
             let destinationController = segue.destination as! DetailViewController
-            let row = (self.tableView.indexPathForSelectedRow! as NSIndexPath).row
+            let indexPath = (self.tableView.indexPathForSelectedRow!)
             
-            let popular = populars[row]
+            let people = fetchResultController.object(at: indexPath ) as! People
             
-            if let fotoCore = popular.photo {
+            if let fotoCore = people.photo {
                  destinationController.imageData = fotoCore
             }
 
@@ -134,36 +126,40 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
     
     func loadData() {
         ProgressHUBController.show(label: NSLocalizedString("Гружу...", comment: "Text for ProgressHUBController"))
- 
-
         
-        /* CODEREVIEW_6
-         Для отображения данных из БД в таблице используй NSFetchedResultsController
-         */
+        //        PopularController.getFromCore() { [weak self] result in
+        //            switch result {
+        //            case .success(let popularArray):
+        //
+        //                self?.populars = popularArray
+        //                DispatchQueue.main.async {
+        //                    self?.tableView.reloadData()
+        //                    self?.refreshControl?.endRefreshing()
+        //                    ProgressHUBController.hide()
+        //                }
+        //
+        //            case .failure( _):
+        //                //print(error)
+        //
+        //                self?.populars = []
+        //                DispatchQueue.main.async {
+        //                    self?.tableView.reloadData()
+        //                    self?.refreshControl?.endRefreshing()
+        //                    ProgressHUBController.hide()
+        //                }
+        //            }
+        //
+        //        }
+        
+        
         PopularController.getFromCore() { [weak self] result in
-            switch result {
-            case .success(let popularArray):
-                
-                self?.populars = popularArray
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                    self?.refreshControl?.endRefreshing()
-                    ProgressHUBController.hide()
-                }
-                
-            case .failure( _):
-                //print(error)
-                
-                self?.populars = []
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                    self?.refreshControl?.endRefreshing()
-                    ProgressHUBController.hide()
-                }
+            DispatchQueue.main.async {
+                self?.refreshControl?.endRefreshing()
+                ProgressHUBController.hide()
             }
             
         }
-    }
+      }
     
  
 }

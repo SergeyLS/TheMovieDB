@@ -7,18 +7,17 @@
 //
 
 import UIKit
+import CoreData
 
 private let reuseIdentifier = "Cell"
 
-class PopularCollectionViewController: UICollectionViewController {
+class PopularCollectionViewController: UICollectionViewController, NSFetchedResultsControllerDelegate {
 
     
     //==================================================
     // MARK: - Stored Properties
     //==================================================
-    //var populars = [NSDictionary] ()
-    var populars = [People]()
-    
+    var fetchResultController = CoreDataManager.shared.fetchedResultsController(entityName: "People", keyForSort: "name")
     let refreshControl = UIRefreshControl()
 
     
@@ -29,15 +28,19 @@ class PopularCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Register cell classes
-       // self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
-        // UIRefreshControl
+        fetchResultController.delegate = self
         
         refreshControl.backgroundColor = UIColor.white
         refreshControl.tintColor = UIColor.gray
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControlEvents.valueChanged)
         collectionView!.addSubview(refreshControl)
+        
+        do {
+            try fetchResultController.performFetch()
+        } catch {
+            print(error)
+        }
         
         
         loadData()
@@ -58,49 +61,25 @@ class PopularCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return populars.count
+        if let sections = fetchResultController.sections, sections.count > 0 {
+            return sections[section].numberOfObjects
+        } else {
+            return 0
+        }
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PopularCollectionViewCell
     
-        let popular = populars[indexPath.row]
+        let people = fetchResultController.object(at: indexPath) as! People
 
-        cell.name.text = popular.name
-        
-//        let profile_path = popular["profile_path"] as? String
-//        
-//        cell.photo.image = UIImage(named: "spinner")
-//        cell.photo.startRotating()
-//        
-//        
-//        let imageURL = TMDBConfig.buildImagePath(poster_path: profile_path!)
-//        let imageRequest = NSURLRequest(url: NSURL(string:imageURL)! as URL)
-//        
-//        
-//        cell.photo.setImageWith(
-//            imageRequest as URLRequest,
-//            placeholderImage: nil,
-//            success: { (imageRequest, imageResponse, image) -> Void in
-//                cell.photo.stopRotating()
-//                // imageResponse will be nil if the image is cached
-//                if imageResponse != nil {
-//                    // print("Image was NOT cached, fade in image")
-//                    cell.photo.image = image
-//                } else {
-//                    //print("Image was cached so just update the image")
-//                    cell.photo.image = image
-//                }
-//        },
-//            failure: { (imageRequest, imageResponse, error) -> Void in
-//                // do something for the failure condition
-//        })
+        cell.name.text = people.name
         
         cell.photo.image = UIImage(named: "spinner")
         cell.photo.startRotating()
         
         DispatchQueue.main.async {
-            PopularController.getImage(people: popular, imageSize: ImageSize.thumbnail, completion: { (image) in
+            PopularController.getImage(people: people, imageSize: ImageSize.thumbnail, completion: { (image) in
                 
                 cell.photo.image = image
                 cell.photo.stopRotating()
@@ -122,31 +101,49 @@ class PopularCollectionViewController: UICollectionViewController {
          ProgressHUBController.show(label: NSLocalizedString("Гружу...", comment: "Text for ProgressHUBController"))
         
         
+//        PopularController.getFromCore() { [weak self] result in
+//            switch result {
+//            case .success(let popularArray):
+//                
+//                self?.populars = popularArray
+//                DispatchQueue.main.async {
+//                    self?.collectionView?.reloadData()
+//                    self?.refreshControl.endRefreshing()
+//                    ProgressHUBController.hide()
+//                }
+//                
+//            case .failure( _):
+//                //print(error)
+//                self?.populars = []
+//                DispatchQueue.main.async {
+//                    self?.collectionView?.reloadData()
+//                    self?.refreshControl.endRefreshing()
+//                    ProgressHUBController.hide()
+//                }
+//                
+//                
+//            }
+//        }
+        
         PopularController.getFromCore() { [weak self] result in
-            switch result {
-            case .success(let popularArray):
-                
-                self?.populars = popularArray
-                DispatchQueue.main.async {
-                    self?.collectionView?.reloadData()
-                    self?.refreshControl.endRefreshing()
-                    ProgressHUBController.hide()
-                }
-                
-            case .failure( _):
-                //print(error)
-                self?.populars = []
-                DispatchQueue.main.async {
-                    self?.collectionView?.reloadData()
-                    self?.refreshControl.endRefreshing()
-                    ProgressHUBController.hide()
-                }
-                
-                
+            DispatchQueue.main.async {
+                self?.refreshControl.endRefreshing()
+                ProgressHUBController.hide()
             }
+            
         }
+
+        
     }
 
+    //==================================================
+    // MARK: - fetchResultController
+    //==================================================
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        collectionView?.reloadData()
+    }
+
+    
     
     //==================================================
     // MARK: - Navigation
@@ -157,11 +154,9 @@ class PopularCollectionViewController: UICollectionViewController {
             
             if let cell = sender as? PopularCollectionViewCell,
                 let indexPath = collectionView?.indexPath(for: cell) {
+                 let people = fetchResultController.object(at: indexPath ) as! People
                 
-                let row = indexPath.row
-                let popular = populars[row]
-                
-                if let fotoCore = popular.photo {
+                if let fotoCore = people.photo {
                     destinationController.imageData = fotoCore
                 }
                 

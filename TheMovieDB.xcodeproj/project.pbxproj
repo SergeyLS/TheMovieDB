@@ -13,6 +13,7 @@
 		A62AA0E31E40A909005558F5 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A62AA0E21E40A909005558F5 /* UIView+Extension.swift */; };
 		A62AA0E51E40AA49005558F5 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A62AA0E41E40AA49005558F5 /* UIImage+Extension.swift */; };
 		A62AA1291E42326A005558F5 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A62AA1281E42326A005558F5 /* NetworkManager.swift */; };
+		A62AA12B1E433258005558F5 /* PeopleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A62AA12A1E433258005558F5 /* PeopleController.swift */; };
 		A6691F1B1E3E226900AE46DB /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6691F1A1E3E226900AE46DB /* CoreDataManager.swift */; };
 		A6691F1D1E3E242900AE46DB /* UsefulFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6691F1C1E3E242900AE46DB /* UsefulFunctions.swift */; };
 		A6691F211E3EB96700AE46DB /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6691F201E3EB96700AE46DB /* DetailViewController.swift */; };
@@ -39,6 +40,7 @@
 		A62AA0E21E40A909005558F5 /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Extension.swift"; path = "Extensions/UIView+Extension.swift"; sourceTree = "<group>"; };
 		A62AA0E41E40AA49005558F5 /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+Extension.swift"; path = "Extensions/UIImage+Extension.swift"; sourceTree = "<group>"; };
 		A62AA1281E42326A005558F5 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkManager.swift; path = Controllers/NetworkManager.swift; sourceTree = "<group>"; };
+		A62AA12A1E433258005558F5 /* PeopleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeopleController.swift; sourceTree = "<group>"; };
 		A6691F1A1E3E226900AE46DB /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = Controllers/CoreDataManager.swift; sourceTree = "<group>"; };
 		A6691F1C1E3E242900AE46DB /* UsefulFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UsefulFunctions.swift; path = Controllers/UsefulFunctions.swift; sourceTree = "<group>"; };
 		A6691F201E3EB96700AE46DB /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetailViewController.swift; path = Popular/DetailViewController.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			children = (
 				A67FF56B1E3A247800FE55C9 /* ProgressHUBController.swift */,
 				A67FF5741E3A2DBD00FE55C9 /* PopularController.swift */,
+				A62AA12A1E433258005558F5 /* PeopleController.swift */,
 				A62AA1281E42326A005558F5 /* NetworkManager.swift */,
 				A6691F1A1E3E226900AE46DB /* CoreDataManager.swift */,
 				A6691F1C1E3E242900AE46DB /* UsefulFunctions.swift */,
@@ -307,6 +310,7 @@
 				A61947121E3A30C3001E09E0 /* PopularTableViewCell.swift in Sources */,
 				A67FF54F1E39FC2200FE55C9 /* TheMovieDB.xcdatamodeld in Sources */,
 				A67FF5781E3A2DF000FE55C9 /* People.swift in Sources */,
+				A62AA12B1E433258005558F5 /* PeopleController.swift in Sources */,
 				A67FF56A1E3A244700FE55C9 /* PopularTableViewController.swift in Sources */,
 				A6691F211E3EB96700AE46DB /* DetailViewController.swift in Sources */,
 				A67FF5751E3A2DBD00FE55C9 /* PopularController.swift in Sources */,
