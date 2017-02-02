@@ -21,40 +21,7 @@ enum ImageSize {
 }
 
 
-
 class PopularController {
-    
-    /* CODEREVIEW_9
-     Я бы перенес весь код по работе с сетью в NetworkManager, а парсинг в Manager подобный этому. Мне только название не нравится 'PopularController' - визуально срабатывает что это ViewController.
-     */
-    static func getFromTMDB(completion: @escaping (Result<[[String : AnyObject]]>) -> Void) {
-        
-        //let stringURL = TMDBConfig.popular + TMDBConfig.API_KEY + "&language=en-US&page=1"
-        
-        let stringURL = TMDBConfig.popular + TMDBConfig.API_KEY + "&language=en-US&page=1"
-        
-        let url = URL(string: stringURL)!
-        
-        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
-        
-        let session = URLSession(configuration: .default)
-        let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            if let data = data,
-                let dataDictionary = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String : Any],
-                let popularsRep = dataDictionary["results"] as? [[String : AnyObject]]
-                {
-                completion(Result.success(popularsRep))
-                
-            } else {
-                //fatalError(error as! String)
-                completion(Result.failure(error!))
-             }
-            
-         }
-        task.resume()
-        
-    }
-    
     
     static func getPeopleByIdName(idName: Int64) -> People? {
         
@@ -64,22 +31,14 @@ class PopularController {
         let predicate = NSPredicate(format: "id == %@", argumentArray: [idName])
         request.predicate = predicate
         
-        let resultsArray = (try? Stack.shared.managedObjectContext.fetch(request)) as? [People]
+        let resultsArray = (try? CoreDataManager.shared.managedObjectContext.fetch(request)) as? [People]
         
         return resultsArray?.first ?? nil
     }
 
     
-    
-    /* CODEREVIEW_11
-     Колбэк тебе не нужен. Когда данные в базе обновляются NSFetchedResultsController об этом узнает и запускает делегата controllerDidChangeContent(_ controller:)
-     */
     static func getFromCore(completion: @escaping (Result<[People]>) -> Void) {
-        
-//        let moc = Stack.shared.managedObjectContext
-        let moc = Stack.shared.backgroundContext
-        
-        PopularController.getFromTMDB() { result in
+        NetworkManager.getFromTMDB() { result in
             switch result {
             case .success(let popularDict):
                 var peoples = [People]()
@@ -87,6 +46,7 @@ class PopularController {
                 /* CODEREVIEW_10
                  Весь парсинг в бэкграунде запустить и операцию сохранить БД запустить тоьлко в конце когда все сущности уже занесены в контекст
                  */
+                let moc = CoreDataManager.shared.backgroundContext
                 moc.perform{
                     for  element in popularDict {
                         guard let id = element["id"] as? Int64 else {
@@ -100,11 +60,7 @@ class PopularController {
                         } else {
                             // New
                             guard let newPeople = People(dictionary: element as NSDictionary) else {
-                                
-                                /* CODEREVIEW_13
-                                 Используй print вместо NSLog
-                                 */
-                                NSLog("Error: Could not create a new TrainingExcersise from the CloudKit record.")
+                                print("Error: Could not create a new TrainingExcersise from the CloudKit record.")
                                 continue
                             }
                             
@@ -112,7 +68,8 @@ class PopularController {
                         } //else
                     } //for  element in popularDict
 
-                    PersistenceController.shared.saveContext()
+                    CoreDataManager.shared.saveContext()
+                    completion(Result.success(peoples))
                 }
                 
             case .failure(let error):
@@ -146,11 +103,11 @@ class PopularController {
                 let image = UIImage(data: data)
             {
                 
-               let thumbnail = ImageController.ResizeImage(image: image, newWidth: 150)
+               let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
                 
                people.thumbnail = UIImagePNGRepresentation(thumbnail)
                people.photo = data
-               PersistenceController.shared.saveContext()
+               CoreDataManager.shared.saveContext()
                 
                 switch imageSize {
                 case .original:

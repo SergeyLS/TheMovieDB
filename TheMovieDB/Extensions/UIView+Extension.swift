@@ -1,20 +1,14 @@
 //
-//  Extensions.swift
+//  UIView+Extension.swift
 //  TheMovieDB
 //
-//  Created by Sergey Leskov on 1/26/17.
+//  Created by Sergey Leskov on 1/31/17.
 //  Copyright © 2017 Sergey Leskov. All rights reserved.
 //
 
 import UIKit
 
-//==================================================
-// MARK: - UIView
-//==================================================
 
-/* CODEREVIEW_7
- Extensions классов лучше разносить по разным swift файлам. Например UIView+Extension.swift
- */
 extension UIView {
     func startRotating(_ duration: Double = 1) {
         let kAnimationKey = "rotation"

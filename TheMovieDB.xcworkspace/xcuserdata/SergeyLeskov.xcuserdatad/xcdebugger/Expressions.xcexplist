@@ -46,5 +46,13 @@
             </PersistentString>
          </PersistentStrings>
       </ContextState>
+      <ContextState
+         contextName = "static PopularController.(getFromCore(completion : (Result&lt;[People]&gt;) -&gt; ()) -&gt; ()).(closure #1).(closure #1):PopularController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "peoples.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
    </ContextStates>
 </VariablesViewState>

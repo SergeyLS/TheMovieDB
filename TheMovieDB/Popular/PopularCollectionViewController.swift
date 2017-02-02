@@ -45,7 +45,6 @@ class PopularCollectionViewController: UICollectionViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     //==================================================
@@ -53,8 +52,7 @@ class PopularCollectionViewController: UICollectionViewController {
     //==================================================
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
+         return 1
     }
 
 
@@ -123,30 +121,6 @@ class PopularCollectionViewController: UICollectionViewController {
     func loadData() {
          ProgressHUBController.show(label: NSLocalizedString("Гружу...", comment: "Text for ProgressHUBController"))
         
-        
-//        let stringURL = TMDBConfig.popular + TMDBConfig.API_KEY + "&language=en-US&page=1"
-//        
-//        let url = URL(string: stringURL)!
-//        
-//        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
-//        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
-//        let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-//            if let data = data {
-//                if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
-//                    //print(dataDictionary)
-//                    
-//                    self.populars = (dataDictionary["results"] as! [NSDictionary])
-//                    
-//                    self.collectionView?.reloadData()
-//                    self.refreshControl.endRefreshing()
-//                     ProgressHUBController.hide()
-//                    
-//                }
-//            }
-//            
-//        }
-//        task.resume()
-
         
         PopularController.getFromCore() { [weak self] result in
             switch result {

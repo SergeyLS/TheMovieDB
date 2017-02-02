@@ -1,17 +1,13 @@
 //
-//  ImageController.swift
-//  OnlineTrainer
+//  UIImage+Extension.swift
+//  TheMovieDB
 //
-//  Created by Sergey Leskov on 9/30/16.
-//  Copyright © 2016 Sergey Leskov. All rights reserved.
+//  Created by Sergey Leskov on 1/31/17.
+//  Copyright © 2017 Sergey Leskov. All rights reserved.
 //
 
-import Foundation
+
 import UIKit
-
-/* CODEREVIEW_15
- Лучше перенести код в расширение UIImage. Например UIImage+Extension.swift
- */
 
 class ImageController {
     
@@ -53,6 +49,6 @@ class ImageController {
         
         return UIImagePNGRepresentation(returnImage)!
     }
-
+    
     
 }
