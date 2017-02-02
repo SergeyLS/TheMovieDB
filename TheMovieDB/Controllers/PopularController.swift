@@ -81,7 +81,7 @@ class PopularController {
     
     static func getImage(people: People, imageSize: ImageSize, completion: @escaping (_ image: UIImage) -> Void)  {
         
-        if let fotoOriginal = people.photo,
+          if let fotoOriginal = people.photo,
             let fotoThumbnail = people.thumbnail
         {
             
@@ -95,30 +95,53 @@ class PopularController {
             
         } else {
             
+                if let profile_path = people.profile_path,
+                    let url = URL(string: TMDBConfig.buildImagePathX3(poster_path: profile_path)),
+                    let data = try? Data(contentsOf: url),
+                    let image = UIImage(data: data)
+                {
+                    
+                    let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
+                    
+                    people.thumbnail = UIImagePNGRepresentation(thumbnail)
+                    people.photo = data
+                    CoreDataManager.shared.saveContext()
+                    
+                    switch imageSize {
+                    case .original:
+                        completion(image)
+                    case .thumbnail:
+                        completion(thumbnail)
+                    }
+                    
+                }
+            
+        } //else
+        
+    }
+    
+    static func loadImage(people: People) {
+        DispatchQueue.main.async {
             if let profile_path = people.profile_path,
                 let url = URL(string: TMDBConfig.buildImagePathX3(poster_path: profile_path)),
                 let data = try? Data(contentsOf: url),
                 let image = UIImage(data: data)
             {
                 
-               let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
+                let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
                 
-               people.thumbnail = UIImagePNGRepresentation(thumbnail)
-               people.photo = data
-               CoreDataManager.shared.saveContext()
-                
-                switch imageSize {
-                case .original:
-                    completion(image)
-                case .thumbnail:
-                    completion(thumbnail)
+                let moc = CoreDataManager.shared.backgroundContext
+                moc?.perform {
+                    people.thumbnail = UIImagePNGRepresentation(thumbnail)
+                    people.photo = data
+                    CoreDataManager.shared.saveContext()
                 }
-              
+                
             }
-             
-        } //else
-        
+            
+        }
     }
+    
     
     
 }

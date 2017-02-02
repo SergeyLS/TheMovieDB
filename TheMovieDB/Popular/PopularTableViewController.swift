@@ -69,36 +69,103 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
   
         let people = fetchResultController.object(at: indexPath) as! People
         
-        cell.title = people.name
         
+//        DispatchQueue.main.async {
+//            PopularController.getImage(people: people, imageSize: ImageSize.thumbnail, completion: { (image) in
+//                
+//                cell.photo.image = image
+//                cell.photo.stopRotating()
+//                
+//            })
+//        }
         
+//        if let  fotoThumbnail = people.thumbnail {
+//            cell.photo.image = UIImage(data: fotoThumbnail)
+//            cell.photo.stopRotating()
+//        }
+//        
+//        
+//        DispatchQueue.main.async(execute: {
+//            if let profile_path = people.profile_path,
+//                let url = URL(string: TMDBConfig.buildImagePathX3(poster_path: profile_path)),
+//                let data = try? Data(contentsOf: url),
+//                let image = UIImage(data: data)
+//            {
+//                
+//                let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
+//                
+//                people.thumbnail = UIImagePNGRepresentation(thumbnail)
+////                people.photo = data
+////                CoreDataManager.shared.saveContext()
+//                cell.photo.image = thumbnail
+//                
+//            } //else
+//        })
         
-        //let id = popular["id"] as? String
-        //let profile_path = popular.profile_path
-        
-        cell.photo.image = UIImage(named: "spinner")
-        cell.photo.startRotating()
-        
-        DispatchQueue.main.async {
-            PopularController.getImage(people: people, imageSize: ImageSize.thumbnail, completion: { (image) in
-                
-                cell.photo.image = image
-                cell.photo.stopRotating()
-                
-            })
-        }
-      
-        
+        updateCell(cell: cell, people: people)
+
         return cell
     }
     
-    //==================================================
-    // MARK: - fetchResultController
-    //==================================================
-     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView?.reloadData()
-    }
+    
+    func updateCell(cell: PopularTableViewCell, people: People)  {
+        
+        cell.title = people.name
+        cell.photo.image = UIImage(named: "spinner")
+        cell.photo.startRotating()
 
+        DispatchQueue.main.async {
+            if let  fotoThumbnail = people.thumbnail {
+                cell.photo.image = UIImage(data: fotoThumbnail)
+                cell.photo.stopRotating()
+            } else {
+                PopularController.loadImage(people: people)
+            }
+        }
+
+    }
+    
+    
+    //==================================================
+    // MARK: - Fetched Results Controller Delegate
+    //==================================================
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            if let indexPath = newIndexPath {
+                tableView.insertRows(at: [indexPath as IndexPath], with: .automatic)
+            }
+        case .update:
+            if let indexPath = indexPath {
+                if let cell = tableView.cellForRow(at: indexPath as IndexPath) as? PopularTableViewCell,
+                    let people = fetchResultController.object(at: indexPath as IndexPath) as? People
+                {
+                    updateCell(cell: cell, people: people)
+                }
+            }
+        case .move:
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath as IndexPath], with: .automatic)
+            }
+            if let newIndexPath = newIndexPath {
+                tableView.insertRows(at: [newIndexPath as IndexPath], with: .automatic)
+            }
+        case .delete:
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath as IndexPath], with: .automatic)
+            }
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+    }
+    
+    
     //==================================================
     // MARK: - Navigation
     //==================================================
@@ -125,7 +192,7 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
     //==================================================
     
     func loadData() {
-        ProgressHUBController.show(label: NSLocalizedString("Гружу...", comment: "Text for ProgressHUBController"))
+        ProgressHUBController.show(label: NSLocalizedString("Load...", comment: "Text for ProgressHUBController"))
         
         //        PopularController.getFromCore() { [weak self] result in
         //            switch result {

@@ -98,7 +98,7 @@ class PopularCollectionViewController: UICollectionViewController, NSFetchedResu
     //==================================================
     
     func loadData() {
-         ProgressHUBController.show(label: NSLocalizedString("Гружу...", comment: "Text for ProgressHUBController"))
+         ProgressHUBController.show(label: NSLocalizedString("Load...", comment: "Text for ProgressHUBController"))
         
         
 //        PopularController.getFromCore() { [weak self] result in
