@@ -39,7 +39,11 @@ public class People: NSManagedObject {
 //    }
     
     
-    convenience required public init?(dictionary: NSDictionary){
+    /* CODEREVIEW_2
+     Лучше создать метод класса, чем переопределять init для NSManagedObject. 
+     Нельзя создавать/инициализировать entity в одном контексте/thread-е и передавать его в другой контекст/thread - это не threadsafe - это нарушение Правило 2
+     */
+    class func entity(dictionary: NSDictionary, context: NSManagedObjectContext) -> People? {
         guard let name = dictionary["name"] as? String,
             let profile_path = dictionary["profile_path"] as? String,
             let id = dictionary["id"] as? Int64
@@ -47,21 +51,25 @@ public class People: NSManagedObject {
                 return nil
         }
         
-        guard let tempEntity = NSEntityDescription.entity(forEntityName: People.type, in: CoreDataManager.shared.viewContext) else {
-            fatalError("Could not initialize People")
-            return nil
-        }
-        self.init(entity: tempEntity, insertInto: CoreDataManager.shared.viewContext)
+        /* CODEREVIEW_3
+         Т.к. у тебя код все равно заточен под iOS 10, то можно использовать новый API: NSManagedObject(context:)
+         */
+        let resultEntity = People(context: context)
+//        guard let tempEntity = NSEntityDescription.entity(forEntityName: People.type, in: CoreDataManager.shared.viewContext) else {
+//            fatalError("Could not initialize People")
+//            return nil
+//        }
+        
+//        self.init(entity: tempEntity, insertInto: CoreDataManager.shared.viewContext)
 
         
-        self.name = name
-        self.profile_path = profile_path
+        resultEntity.name = name
+        resultEntity.profile_path = profile_path
        
-        self.id = id
+        resultEntity.id = id
         
         print("add people id: " + String(id))
+        
+        return resultEntity;
     }
-
-
-
 }

@@ -37,48 +37,60 @@ class PopularController {
     }
 
     
-    static func getFromCore(completion: @escaping (Result<[People]>) -> Void) {
+    /* CODEREVIEW_7
+     Правило 1. Ты можешь вернуть из метода массив NSManagedObject-ов, но с ним прийдется работать в том же срэде (background). Передавать в main thread не стоит - большая вероятность крэша! Поэтому при работе с NSManagedObject масксиму что передают - это массив ID entity
+     */
+    static func getFromCore(completion: @escaping () -> Void) {
         NetworkManager.getFromTMDB() { result in
             switch result {
             case .success(let popularDict):
-                var peoples = [People]()
+//                var peoples = [People]()
                 
-                let moc = CoreDataManager.shared.backgroundContext
-                moc?.perform{
+                let moc = CoreDataManager.shared.newBackgroundContext
+                /* CODEREVIEW_5
+                 Почитай про weak и strong ссылки; циклические ссылки и как разрешать/resolve
+                 */
+                moc.perform{ [weakMoc = moc] in
                     for  element in popularDict {
                         guard let id = element["id"] as? Int64 else {
                             continue
                         }
                         
-                        if let existPeople = getPeopleByIdName(idName: Int64(id) )  {
+                        if let _ = getPeopleByIdName(idName: Int64(id) )  {
                             //update
                             //print("id exist:" + String(id))
-                            peoples.append(existPeople)
+//                            peoples.append(existPeople)
                         } else {
                             // New
-                            guard let newPeople = People(dictionary: element as NSDictionary) else {
+                            guard let _ = People.entity(dictionary: element as NSDictionary, context: weakMoc) else {
                                 print("Error: Could not create a new TrainingExcersise from the CloudKit record.")
                                 continue
                             }
                             
-                            peoples.append(newPeople)
+//                            peoples.append(newPeople)
                         } //else
                     } //for  element in popularDict
-
                     
-                    CoreDataManager.shared.saveContext()
-                    completion(Result.success(peoples))
+                    /* CODEREVIEW_10
+                     Правило 3
+                     */
+                    CoreDataManager.shared.save(context: weakMoc)
+                    completion()
                 }
                 
-            case .failure(let error):
+            case .failure(_):
                 //print(error)
                 
-                completion(Result.failure(error))
+                completion()
             }
         }
     }
 
     
+    /* CODEREVIEW_8
+     Стремный способ загрузки картинок. Никогда так не делай. Используй USRLSession.
+     Для того чтобы прервать такую загрузку нужно танцевать с бубном еще. А прерывать тебе прийдется часто: например если для cell на экране ты грузишь картинку, а в это време пользователь скроли таблицу и cell уходит с экрана - зугрузку нужно остановить, потому что cell попадет в очередь таблицы на переиспользование и когда от туда она снова попадет на экран, то ты запустишь загрузку уже другой картинки. При твоем подходе количество отновременных закачек с сервера неконтролируемо и может перегружать само приложение. Переделай на URLSession     
+     */
     static func getImage(people: People, imageSize: ImageSize, completion: @escaping (_ image: UIImage) -> Void)  {
         
         if let fotoOriginal = people.photo,
@@ -105,6 +117,10 @@ class PopularController {
                 
                people.thumbnail = UIImagePNGRepresentation(thumbnail)
                people.photo = data
+                /* CODEREVIEW_12
+                 Правило 3
+                 В данном случае нужно подумать стоит ли так часто дергать базу на сохранение. Возможно в AppDelegate в методе applicationDidEnterBackground и applicationWillTerminate будет достаточно
+                 */
                CoreDataManager.shared.saveContext()
                 
                 switch imageSize {

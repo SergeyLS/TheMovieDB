@@ -11,13 +11,17 @@ import CoreData
 
 private let reuseIdentifier = "Cell"
 
+/* CODEREVIEW_9
+ Для CollectionView все тоже самое что и для TableView
+ */
+
 class PopularCollectionViewController: UICollectionViewController, NSFetchedResultsControllerDelegate {
 
     
     //==================================================
     // MARK: - Stored Properties
     //==================================================
-    var fetchResultController = CoreDataManager.shared.fetchedResultsController(entityName: "People", keyForSort: "name")
+    var fetchResultController = CoreDataManager.shared.newFetchedResultsController(entityName: "People", keyForSort: "name")
     let refreshControl = UIRefreshControl()
 
     
