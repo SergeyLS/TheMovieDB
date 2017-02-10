@@ -19,11 +19,11 @@ class CoreDataManager {
     static let shared = CoreDataManager()
     private init() {
     }
-
+    
     //==================================================
     // MARK: - Properties
     //==================================================
-     var viewContext: NSManagedObjectContext {
+    var viewContext: NSManagedObjectContext {
         get {
             let resultContext = persistentContainer.viewContext
             resultContext.automaticallyMergesChangesFromParent = true
@@ -31,8 +31,8 @@ class CoreDataManager {
         }
     }
     var newBackgroundContext: NSManagedObjectContext {
-            return persistentContainer.newBackgroundContext()
-     }
+        return persistentContainer.newBackgroundContext()
+    }
     
     //==================================================
     // MARK: - Core Data stack
@@ -83,7 +83,7 @@ class CoreDataManager {
         }
     }
     
-     public func save(context: NSManagedObjectContext) {
+    public func save(context: NSManagedObjectContext) {
         if context.hasChanges {
             do {
                 try context.save()
@@ -99,7 +99,7 @@ class CoreDataManager {
     //==================================================
     // MARK: - fetchedResultsController
     //==================================================
-    public func newFetchedResultsController(entityName: String, keyForSort: String) -> NSFetchedResultsController<NSFetchRequestResult> {
+    public func FetchedResultsController(entityName: String, keyForSort: String) -> NSFetchedResultsController<NSFetchRequestResult> {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
         let sortDescriptor = NSSortDescriptor(key: keyForSort, ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]

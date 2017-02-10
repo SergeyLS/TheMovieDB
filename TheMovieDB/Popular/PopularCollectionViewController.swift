@@ -18,7 +18,7 @@ class PopularCollectionViewController: UICollectionViewController, NSFetchedResu
     //==================================================
     // MARK: - Stored Properties
     //==================================================
-    var fetchResultController = CoreDataManager.shared.newFetchedResultsController(entityName: "People", keyForSort: "name")
+    var fetchResultController = CoreDataManager.shared.FetchedResultsController(entityName: "People", keyForSort: "name")
     let refreshControl = UIRefreshControl()
 
     
