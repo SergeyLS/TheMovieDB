@@ -15,7 +15,7 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
     // MARK: - Stored Properties
     //==================================================
 
-     var fetchResultController = CoreDataManager.shared.fetchedResultsController(entityName: "People", keyForSort: "name")
+     var fetchResultController = CoreDataManager.shared.newFetchedResultsController(entityName: "People", keyForSort: "name")
         
     //==================================================
     // MARK: - General
@@ -113,6 +113,7 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
         cell.title = people.name
         cell.photo.image = UIImage(named: "spinner")
         cell.photo.startRotating()
+<<<<<<< HEAD
 
         DispatchQueue.main.async {
             if let  fotoThumbnail = people.thumbnail {
@@ -123,6 +124,23 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
             }
         }
 
+=======
+        
+        /* CODEREVIEW_11
+         В этой точке ты и так уже в main срэде. Тебе нужно запустить загрузку картинки и ее рэсайз в background потоке, а отрисовать на UI уже в main срэде
+         Но при этом варианте (ниже) нарушается Правило 2: "people" нельзя передавать в другой срэд - Сделай через URLSession         
+         */
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
+            PopularController.getImage(people: people, imageSize: ImageSize.thumbnail, completion: { (image) in
+                DispatchQueue.main.async {
+                    cell.photo.image = image
+                    cell.photo.stopRotating()
+                }
+            })
+        }
+        
+        return cell
+>>>>>>> bcaee927be4914e5b920a57eb46bd980981f5bf2
     }
     
     

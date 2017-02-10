@@ -10,6 +10,13 @@ import Foundation
 import CoreData
 import UIKit
 
+/* CODEREVIEW_4
+ ОБЩИЕ ПРАВИЛА РАБОТЫ c CoreData:
+ 
+ Правило 1. NSManagedObject (и все отнаследованные от него) так или иначе создаются с привязкой к контексту. Без привязки объект не имеет смысла. В этом его главное отличие от обычных классов.
+ Правило 2. Если ты инстанциировал NSManagedObject в одном срэде (thread), то в другой его передавать нельзя
+ Правило 3. Сохранять контекст можно только в его же срэде
+ */
 
 class CoreDataManager {
     
@@ -17,20 +24,39 @@ class CoreDataManager {
     // MARK: - Singleton
     //==================================================
     static let shared = CoreDataManager()
-    
+    /* CODEREVIEW_0
+     Твой синглтон не закончен. Нужен init который никто не может вызвать извне:
+    */
+    private init() {
+    }
+
     //==================================================
     // MARK: - Properties
     //==================================================
-    var viewContext: NSManagedObjectContext!
-    var backgroundContext: NSManagedObjectContext!
+    /* CODEREVIEW_1
+     Я бы сделал эти проперти вычисляемыми, т.к. по сути они у тебя "мост" к вложенным пропертям
+     */
+    var viewContext: NSManagedObjectContext {
+        get {
+            let resultContext = persistentContainer.viewContext
+            resultContext.automaticallyMergesChangesFromParent = true
+            return resultContext
+        }
+    }
+    var newBackgroundContext: NSManagedObjectContext {
+        get {
+            let resultContext = persistentContainer.newBackgroundContext()
+            return resultContext
+        }
+    }
     
     //==================================================
     // MARK: - init
     //==================================================
-    init() {
-        viewContext = persistentContainer.viewContext
-        backgroundContext = persistentContainer.newBackgroundContext()
-    }
+//    init() {
+//        viewContext = persistentContainer.viewContext
+//        backgroundContext = persistentContainer.newBackgroundContext()
+//    }
     
     
     //==================================================
@@ -82,19 +108,30 @@ class CoreDataManager {
         }
     }
     
-    
+    /* CODEREVIEW_6
+     Более общий вариант предыдущей функции
+     */
+    public func save(context: NSManagedObjectContext) {
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
     
     //==================================================
     // MARK: - fetchedResultsController
     //==================================================
-    func fetchedResultsController(entityName: String, keyForSort: String) -> NSFetchedResultsController<NSFetchRequestResult> {
+    public func newFetchedResultsController(entityName: String, keyForSort: String) -> NSFetchedResultsController<NSFetchRequestResult> {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
         let sortDescriptor = NSSortDescriptor(key: keyForSort, ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.shared.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: viewContext, sectionNameKeyPath: nil, cacheName: nil)
         return fetchedResultsController
     }
-    
-    
-    
 }
