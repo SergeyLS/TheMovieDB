@@ -13,8 +13,6 @@ class NetworkManager {
     
     static func getFromTMDB(completion: @escaping (Result<[[String : AnyObject]]>) -> Void) {
         
-        //let stringURL = TMDBConfig.popular + TMDBConfig.API_KEY + "&language=en-US&page=1"
-        
         let stringURL = TMDBConfig.popular + TMDBConfig.API_KEY + "&language=en-US&page=1"
         
         let url = URL(string: stringURL)!
@@ -30,13 +28,20 @@ class NetworkManager {
                 completion(Result.success(popularsRep))
                 
             } else {
-                //fatalError(error as! String)
-                completion(Result.failure(error!))
+                 completion(Result.failure(error!))
             }
             
         }
         task.resume()
         
+    }
+    
+    
+    static func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
+        URLSession.shared.dataTask(with: url) {
+            (data, response, error) in
+            completion(data, response, error)
+            }.resume()
     }
 
 }

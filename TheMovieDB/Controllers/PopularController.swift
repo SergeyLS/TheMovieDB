@@ -70,13 +70,9 @@ class PopularController {
     }
 
     
-    /* CODEREVIEW_8
-     Стремный способ загрузки картинок. Никогда так не делай. Используй USRLSession.
-     Для того чтобы прервать такую загрузку нужно танцевать с бубном еще. А прерывать тебе прийдется часто: например если для cell на экране ты грузишь картинку, а в это време пользователь скроли таблицу и cell уходит с экрана - зугрузку нужно остановить, потому что cell попадет в очередь таблицы на переиспользование и когда от туда она снова попадет на экран, то ты запустишь загрузку уже другой картинки. При твоем подходе количество отновременных закачек с сервера неконтролируемо и может перегружать само приложение. Переделай на URLSession     
-     */
-    static func getImage(people: People, imageSize: ImageSize, completion: @escaping (_ image: UIImage) -> Void)  {
+    static func old_getImage(people: People, imageSize: ImageSize, completion: @escaping (_ image: UIImage) -> Void)  {
         
-          if let fotoOriginal = people.photo,
+        if let fotoOriginal = people.photo,
             let fotoThumbnail = people.thumbnail
         {
             
@@ -90,48 +86,94 @@ class PopularController {
             
         } else {
             
-                if let profile_path = people.profile_path,
-                    let url = URL(string: TMDBConfig.buildImagePathX3(poster_path: profile_path)),
-                    let data = try? Data(contentsOf: url),
-                    let image = UIImage(data: data)
-                {
-                    
-                    let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
-                    
-                    people.thumbnail = UIImagePNGRepresentation(thumbnail)
-                    people.photo = data
-                    CoreDataManager.shared.saveContext()
-                    
-                    switch imageSize {
-                    case .original:
-                        completion(image)
-                    case .thumbnail:
-                        completion(thumbnail)
-                    }
-                    
-                }
-            
-        } //else
-        
-    }
-    
-    static func loadImage(people: People) {
-        DispatchQueue.main.async {
             if let profile_path = people.profile_path,
                 let url = URL(string: TMDBConfig.buildImagePathX3(poster_path: profile_path)),
                 let data = try? Data(contentsOf: url),
                 let image = UIImage(data: data)
             {
                 
-               let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
+                let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
                 
-               people.thumbnail = UIImagePNGRepresentation(thumbnail)
-               people.photo = data
+                people.thumbnail = UIImagePNGRepresentation(thumbnail)
+                people.photo = data
+                CoreDataManager.shared.saveContext()
                 
+                switch imageSize {
+                case .original:
+                    completion(image)
+                case .thumbnail:
+                    completion(thumbnail)
+                }
+            }
+        } //else
+    }
+    
+    
+    
+    static func getImage(people: People, imageSize: ImageSize, completion: @escaping (_ image: UIImage) -> Void)  {
+        
+        if let fotoOriginal = people.photo,
+            let fotoThumbnail = people.thumbnail
+        {
+            
+            switch imageSize {
+            case .original:
+                completion(UIImage(data: fotoOriginal)!)
+            case .thumbnail:
+                completion(UIImage(data: fotoThumbnail)!)
             }
             
-        }
-    }
+            
+        } else {
+            
+            if let profile_path = people.profile_path,
+                let url = URL(string: TMDBConfig.buildImagePathX3(poster_path: profile_path))
+            {
+                NetworkManager.getDataFromUrl(url: url) { (data, response, error)  in
+                    guard let data = data, error == nil else { return }
+                    
+                    DispatchQueue.main.async() { () -> Void in
+                        
+                        let image = UIImage(data: data)!
+                        
+                        let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
+                        
+                        people.thumbnail = UIImagePNGRepresentation(thumbnail)
+                        people.photo = data
+                        CoreDataManager.shared.saveContext()
+                        
+                        switch imageSize {
+                        case .original:
+                            completion(image)
+                        case .thumbnail:
+                            completion(thumbnail)
+                        }
+                        
+                    }
+                }
+            }
+         }
+    } //func getImage
+    
+    
+    
+//    static func loadImage(people: People) {
+//        DispatchQueue.main.async {
+//            if let profile_path = people.profile_path,
+//                let url = URL(string: TMDBConfig.buildImagePathX3(poster_path: profile_path)),
+//                let data = try? Data(contentsOf: url),
+//                let image = UIImage(data: data)
+//            {
+//                
+//               let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
+//                
+//               people.thumbnail = UIImagePNGRepresentation(thumbnail)
+//               people.photo = data
+//                
+//            }
+//            
+//        }
+//    }
     
     
     

@@ -102,38 +102,12 @@ class PopularCollectionViewController: UICollectionViewController, NSFetchedResu
          ProgressHUBController.show(label: NSLocalizedString("Load...", comment: "Text for ProgressHUBController"))
         
         
-//        PopularController.getFromCore() { [weak self] result in
-//            switch result {
-//            case .success(let popularArray):
-//                
-//                self?.populars = popularArray
-//                DispatchQueue.main.async {
-//                    self?.collectionView?.reloadData()
-//                    self?.refreshControl.endRefreshing()
-//                    ProgressHUBController.hide()
-//                }
-//                
-//            case .failure( _):
-//                //print(error)
-//                self?.populars = []
-//                DispatchQueue.main.async {
-//                    self?.collectionView?.reloadData()
-//                    self?.refreshControl.endRefreshing()
-//                    ProgressHUBController.hide()
-//                }
-//                
-//                
-//            }
-//        }
-        
         PopularController.getFromCore() { [weak self] result in
             DispatchQueue.main.async {
                 self?.refreshControl.endRefreshing()
                 ProgressHUBController.hide()
             }
-            
-        }
-
+         }
         
     }
 
