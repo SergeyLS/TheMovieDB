@@ -37,19 +37,11 @@ class PopularController {
     }
 
     
-    /* CODEREVIEW_7
-     Правило 1. Ты можешь вернуть из метода массив NSManagedObject-ов, но с ним прийдется работать в том же срэде (background). Передавать в main thread не стоит - большая вероятность крэша! Поэтому при работе с NSManagedObject масксиму что передают - это массив ID entity
-     */
     static func getFromCore(completion: @escaping () -> Void) {
         NetworkManager.getFromTMDB() { result in
             switch result {
             case .success(let popularDict):
-//                var peoples = [People]()
-                
                 let moc = CoreDataManager.shared.newBackgroundContext
-                /* CODEREVIEW_5
-                 Почитай про weak и strong ссылки; циклические ссылки и как разрешать/resolve
-                 */
                 moc.perform{ [weakMoc = moc] in
                     for  element in popularDict {
                         guard let id = element["id"] as? Int64 else {
@@ -57,9 +49,6 @@ class PopularController {
                         }
                         
                         if let _ = getPeopleByIdName(idName: Int64(id) )  {
-                            //update
-                            //print("id exist:" + String(id))
-//                            peoples.append(existPeople)
                         } else {
                             // New
                             guard let _ = People.entity(dictionary: element as NSDictionary, context: weakMoc) else {
@@ -67,20 +56,14 @@ class PopularController {
                                 continue
                             }
                             
-//                            peoples.append(newPeople)
                         } //else
                     } //for  element in popularDict
                     
-                    /* CODEREVIEW_10
-                     Правило 3
-                     */
                     CoreDataManager.shared.save(context: weakMoc)
                     completion()
                 }
                 
             case .failure(_):
-                //print(error)
-                
                 completion()
             }
         }
@@ -140,26 +123,10 @@ class PopularController {
                 let image = UIImage(data: data)
             {
                 
-<<<<<<< HEAD
-                let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
-=======
                let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
                 
                people.thumbnail = UIImagePNGRepresentation(thumbnail)
                people.photo = data
-                /* CODEREVIEW_12
-                 Правило 3
-                 В данном случае нужно подумать стоит ли так часто дергать базу на сохранение. Возможно в AppDelegate в методе applicationDidEnterBackground и applicationWillTerminate будет достаточно
-                 */
-               CoreDataManager.shared.saveContext()
->>>>>>> bcaee927be4914e5b920a57eb46bd980981f5bf2
-                
-                let moc = CoreDataManager.shared.backgroundContext
-                moc?.perform {
-                    people.thumbnail = UIImagePNGRepresentation(thumbnail)
-                    people.photo = data
-                    CoreDataManager.shared.saveContext()
-                }
                 
             }
             

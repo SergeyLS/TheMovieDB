@@ -11,9 +11,6 @@ import CoreData
 
 private let reuseIdentifier = "Cell"
 
-/* CODEREVIEW_9
- Для CollectionView все тоже самое что и для TableView
- */
 
 class PopularCollectionViewController: UICollectionViewController, NSFetchedResultsControllerDelegate {
 

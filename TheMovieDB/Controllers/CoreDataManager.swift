@@ -10,13 +10,6 @@ import Foundation
 import CoreData
 import UIKit
 
-/* CODEREVIEW_4
- ОБЩИЕ ПРАВИЛА РАБОТЫ c CoreData:
- 
- Правило 1. NSManagedObject (и все отнаследованные от него) так или иначе создаются с привязкой к контексту. Без привязки объект не имеет смысла. В этом его главное отличие от обычных классов.
- Правило 2. Если ты инстанциировал NSManagedObject в одном срэде (thread), то в другой его передавать нельзя
- Правило 3. Сохранять контекст можно только в его же срэде
- */
 
 class CoreDataManager {
     
@@ -24,19 +17,13 @@ class CoreDataManager {
     // MARK: - Singleton
     //==================================================
     static let shared = CoreDataManager()
-    /* CODEREVIEW_0
-     Твой синглтон не закончен. Нужен init который никто не может вызвать извне:
-    */
     private init() {
     }
 
     //==================================================
     // MARK: - Properties
     //==================================================
-    /* CODEREVIEW_1
-     Я бы сделал эти проперти вычисляемыми, т.к. по сути они у тебя "мост" к вложенным пропертям
-     */
-    var viewContext: NSManagedObjectContext {
+     var viewContext: NSManagedObjectContext {
         get {
             let resultContext = persistentContainer.viewContext
             resultContext.automaticallyMergesChangesFromParent = true
@@ -44,20 +31,8 @@ class CoreDataManager {
         }
     }
     var newBackgroundContext: NSManagedObjectContext {
-        get {
-            let resultContext = persistentContainer.newBackgroundContext()
-            return resultContext
-        }
-    }
-    
-    //==================================================
-    // MARK: - init
-    //==================================================
-//    init() {
-//        viewContext = persistentContainer.viewContext
-//        backgroundContext = persistentContainer.newBackgroundContext()
-//    }
-    
+            return persistentContainer.newBackgroundContext()
+     }
     
     //==================================================
     // MARK: - Core Data stack
@@ -108,10 +83,7 @@ class CoreDataManager {
         }
     }
     
-    /* CODEREVIEW_6
-     Более общий вариант предыдущей функции
-     */
-    public func save(context: NSManagedObjectContext) {
+     public func save(context: NSManagedObjectContext) {
         if context.hasChanges {
             do {
                 try context.save()

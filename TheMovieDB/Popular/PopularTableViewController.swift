@@ -70,39 +70,7 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
         let people = fetchResultController.object(at: indexPath) as! People
         
         
-//        DispatchQueue.main.async {
-//            PopularController.getImage(people: people, imageSize: ImageSize.thumbnail, completion: { (image) in
-//                
-//                cell.photo.image = image
-//                cell.photo.stopRotating()
-//                
-//            })
-//        }
-        
-//        if let  fotoThumbnail = people.thumbnail {
-//            cell.photo.image = UIImage(data: fotoThumbnail)
-//            cell.photo.stopRotating()
-//        }
-//        
-//        
-//        DispatchQueue.main.async(execute: {
-//            if let profile_path = people.profile_path,
-//                let url = URL(string: TMDBConfig.buildImagePathX3(poster_path: profile_path)),
-//                let data = try? Data(contentsOf: url),
-//                let image = UIImage(data: data)
-//            {
-//                
-//                let thumbnail = ImageController.ResizeImage(image: image, newWidth: 300)
-//                
-//                people.thumbnail = UIImagePNGRepresentation(thumbnail)
-////                people.photo = data
-////                CoreDataManager.shared.saveContext()
-//                cell.photo.image = thumbnail
-//                
-//            } //else
-//        })
-        
-        updateCell(cell: cell, people: people)
+         updateCell(cell: cell, people: people)
 
         return cell
     }
@@ -113,24 +81,8 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
         cell.title = people.name
         cell.photo.image = UIImage(named: "spinner")
         cell.photo.startRotating()
-<<<<<<< HEAD
-
-        DispatchQueue.main.async {
-            if let  fotoThumbnail = people.thumbnail {
-                cell.photo.image = UIImage(data: fotoThumbnail)
-                cell.photo.stopRotating()
-            } else {
-                PopularController.loadImage(people: people)
-            }
-        }
-
-=======
         
-        /* CODEREVIEW_11
-         В этой точке ты и так уже в main срэде. Тебе нужно запустить загрузку картинки и ее рэсайз в background потоке, а отрисовать на UI уже в main срэде
-         Но при этом варианте (ниже) нарушается Правило 2: "people" нельзя передавать в другой срэд - Сделай через URLSession         
-         */
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
+         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
             PopularController.getImage(people: people, imageSize: ImageSize.thumbnail, completion: { (image) in
                 DispatchQueue.main.async {
                     cell.photo.image = image
@@ -138,9 +90,6 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
                 }
             })
         }
-        
-        return cell
->>>>>>> bcaee927be4914e5b920a57eb46bd980981f5bf2
     }
     
     
@@ -211,30 +160,6 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
     
     func loadData() {
         ProgressHUBController.show(label: NSLocalizedString("Load...", comment: "Text for ProgressHUBController"))
-        
-        //        PopularController.getFromCore() { [weak self] result in
-        //            switch result {
-        //            case .success(let popularArray):
-        //
-        //                self?.populars = popularArray
-        //                DispatchQueue.main.async {
-        //                    self?.tableView.reloadData()
-        //                    self?.refreshControl?.endRefreshing()
-        //                    ProgressHUBController.hide()
-        //                }
-        //
-        //            case .failure( _):
-        //                //print(error)
-        //
-        //                self?.populars = []
-        //                DispatchQueue.main.async {
-        //                    self?.tableView.reloadData()
-        //                    self?.refreshControl?.endRefreshing()
-        //                    ProgressHUBController.hide()
-        //                }
-        //            }
-        //
-        //        }
         
         
         PopularController.getFromCore() { [weak self] result in
