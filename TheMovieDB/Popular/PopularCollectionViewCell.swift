@@ -11,7 +11,6 @@ import UIKit
 class PopularCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var name: UILabel!
-    
     @IBOutlet weak var photo: UIImageView!
     
 }

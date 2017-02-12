@@ -28,6 +28,9 @@
 		A67FF5751E3A2DBD00FE55C9 /* PopularController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67FF5741E3A2DBD00FE55C9 /* PopularController.swift */; };
 		A67FF5781E3A2DF000FE55C9 /* People.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67FF5761E3A2DF000FE55C9 /* People.swift */; };
 		A67FF5791E3A2DF000FE55C9 /* People+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67FF5771E3A2DF000FE55C9 /* People+CoreDataProperties.swift */; };
+		A68DBA5E1E50FD4500D677CD /* CircularCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68DBA5D1E50FD4500D677CD /* CircularCollectionViewController.swift */; };
+		A68DBA601E50FD5B00D677CD /* CircularCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68DBA5F1E50FD5B00D677CD /* CircularCollectionViewCell.swift */; };
+		A68DBA681E5110D900D677CD /* CircularCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68DBA671E5110D900D677CD /* CircularCollectionViewLayout.swift */; };
 		EAE215E54B95E80DFAAE9B20 /* Pods_TheMovieDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FEFB9F282B7A696F6C2CF11 /* Pods_TheMovieDB.framework */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +61,11 @@
 		A67FF5741E3A2DBD00FE55C9 /* PopularController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PopularController.swift; path = Controllers/PopularController.swift; sourceTree = "<group>"; };
 		A67FF5761E3A2DF000FE55C9 /* People.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = People.swift; path = Models/People.swift; sourceTree = "<group>"; };
 		A67FF5771E3A2DF000FE55C9 /* People+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "People+CoreDataProperties.swift"; path = "Models/People+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A68DBA5D1E50FD4500D677CD /* CircularCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircularCollectionViewController.swift; path = Popular/CircularCollectionViewController.swift; sourceTree = "<group>"; };
+		A68DBA5F1E50FD5B00D677CD /* CircularCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircularCollectionViewCell.swift; path = Popular/CircularCollectionViewCell.swift; sourceTree = "<group>"; };
+		A68DBA651E5103E200D677CD /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		A68DBA661E5103E300D677CD /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		A68DBA671E5110D900D677CD /* CircularCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularCollectionViewLayout.swift; sourceTree = "<group>"; };
 		AA8ABDB500FB4CF5EF78B3D9 /* Pods-TheMovieDB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TheMovieDB.release.xcconfig"; path = "Pods/Target Support Files/Pods-TheMovieDB/Pods-TheMovieDB.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -169,13 +177,40 @@
 		A67FF56F1E3A24C500FE55C9 /* Popular */ = {
 			isa = PBXGroup;
 			children = (
-				A67FF5691E3A244700FE55C9 /* PopularTableViewController.swift */,
-				A61947111E3A30C3001E09E0 /* PopularTableViewCell.swift */,
-				A61947151E3A4188001E09E0 /* PopularCollectionViewController.swift */,
-				A61947171E3A4577001E09E0 /* PopularCollectionViewCell.swift */,
+				A68DBA5A1E50F92500D677CD /* TableView */,
+				A68DBA5B1E50F93E00D677CD /* CollectionView */,
+				A68DBA5C1E50F96A00D677CD /* CircularCollectionView */,
 				A6691F201E3EB96700AE46DB /* DetailViewController.swift */,
 			);
 			name = Popular;
+			sourceTree = "<group>";
+		};
+		A68DBA5A1E50F92500D677CD /* TableView */ = {
+			isa = PBXGroup;
+			children = (
+				A67FF5691E3A244700FE55C9 /* PopularTableViewController.swift */,
+				A61947111E3A30C3001E09E0 /* PopularTableViewCell.swift */,
+			);
+			name = TableView;
+			sourceTree = "<group>";
+		};
+		A68DBA5B1E50F93E00D677CD /* CollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				A61947151E3A4188001E09E0 /* PopularCollectionViewController.swift */,
+				A61947171E3A4577001E09E0 /* PopularCollectionViewCell.swift */,
+			);
+			name = CollectionView;
+			sourceTree = "<group>";
+		};
+		A68DBA5C1E50F96A00D677CD /* CircularCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				A68DBA5D1E50FD4500D677CD /* CircularCollectionViewController.swift */,
+				A68DBA5F1E50FD5B00D677CD /* CircularCollectionViewCell.swift */,
+				A68DBA671E5110D900D677CD /* CircularCollectionViewLayout.swift */,
+			);
+			name = CircularCollectionView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -304,6 +339,7 @@
 			files = (
 				A62AA1291E42326A005558F5 /* NetworkManager.swift in Sources */,
 				A61947181E3A4577001E09E0 /* PopularCollectionViewCell.swift in Sources */,
+				A68DBA601E50FD5B00D677CD /* CircularCollectionViewCell.swift in Sources */,
 				A6691F1B1E3E226900AE46DB /* CoreDataManager.swift in Sources */,
 				A67FF56E1E3A24A400FE55C9 /* TMDBConfiguration.swift in Sources */,
 				A62AA0E51E40AA49005558F5 /* UIImage+Extension.swift in Sources */,
@@ -313,11 +349,13 @@
 				A62AA12B1E433258005558F5 /* PeopleController.swift in Sources */,
 				A67FF56A1E3A244700FE55C9 /* PopularTableViewController.swift in Sources */,
 				A6691F211E3EB96700AE46DB /* DetailViewController.swift in Sources */,
+				A68DBA5E1E50FD4500D677CD /* CircularCollectionViewController.swift in Sources */,
 				A67FF5751E3A2DBD00FE55C9 /* PopularController.swift in Sources */,
 				A67FF5471E39FC2200FE55C9 /* AppDelegate.swift in Sources */,
 				A62AA0E31E40A909005558F5 /* UIView+Extension.swift in Sources */,
 				A67FF5791E3A2DF000FE55C9 /* People+CoreDataProperties.swift in Sources */,
 				A6691F1D1E3E242900AE46DB /* UsefulFunctions.swift in Sources */,
+				A68DBA681E5110D900D677CD /* CircularCollectionViewLayout.swift in Sources */,
 				A67FF56C1E3A247800FE55C9 /* ProgressHUBController.swift in Sources */,
 				A61947161E3A4188001E09E0 /* PopularCollectionViewController.swift in Sources */,
 			);
@@ -330,6 +368,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				A67FF54B1E39FC2200FE55C9 /* Base */,
+				A68DBA651E5103E200D677CD /* ru */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -338,6 +377,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				A67FF5531E39FC2200FE55C9 /* Base */,
+				A68DBA661E5103E300D677CD /* ru */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -349,6 +389,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -399,6 +440,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";

@@ -15,7 +15,7 @@ class PopularTableViewController: UITableViewController, NSFetchedResultsControl
     // MARK: - Stored Properties
     //==================================================
 
-     var fetchResultController = CoreDataManager.shared.newFetchedResultsController(entityName: "People", keyForSort: "name")
+     var fetchResultController = CoreDataManager.shared.fetchedResultsController(entityName: "People", keyForSort: "name")
         
     //==================================================
     // MARK: - General
